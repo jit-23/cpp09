@@ -1,15 +1,15 @@
 NAME:=btc
-CFLAGS:= -g -std=c++98 -Wall -Werror -Wextra
-CC:= c++
+CXXFLAGS:= -g -std=c++98 #-Wall -Werror -Wextra
+CXX:= c++
 
-OBJS:= ${patsubst(%.cpp, %.o, ${SRCS})}
-SRCS:=srcs/main.cpp srcs/BitcoinExchange.cpp 
+SRCS:=main.cpp #srcs/BitcoinExchange.cpp 
+OBJS:= ${patsubst %.cpp, %.o, ${SRCS}}
 
 
 all: ${NAME}
 
 ${NAME}: ${OBJS}
-	${CC} ${CFLAGS} ${OBJS} -o ${NAME}
+	${CXX} ${CXXFLAGS} ${OBJS} -o ${NAME}
 
 clean:
 	rm -f ${OBJS}
