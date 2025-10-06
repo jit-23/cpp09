@@ -32,25 +32,38 @@ std::vector<int> PmergeMe::split(const std::string &str)
 		token_vector.push_back(atoi(token.c_str()));
 	return token_vector;
 }
-
+#include <ctime>
+#include <unistd.h>
 void PmergeMe::fill_vt(std::string str)
 {
     this->raw_vt = split(str);
     int x;
     int y;
-    std::cout << raw_vt.size();
-    exit(1);// wtf
+    //std::cout << raw_vt.size();
+    //exit(1);// wtf
+    std::cout << "" << std::endl;
+    std::vector<int>::iterator it = raw_vt.begin();
+    std::cout << "it :" << *it << std::endl;
     for (std::vector<int>::iterator it = raw_vt.begin(); it != raw_vt.end(); it++)
     {
-        std::cout << "1\n";
-        if (++it != raw_vt.end())
+        //std::cout << "it : " << *it << std::endl;
+        //std::cout << "1\n";
+        if (it + 1 != raw_vt.end())
         {
+            it++;
             y = *it;
             --it;
             x = *it;
+            it++;
             pair_vt.push_back(std::make_pair(x,y));
         }
     }
+
+    for (std::vector<std::pair<int,int> >::iterator it = pair_vt.begin();  it != pair_vt.end(); it++)
+    {
+        std::cout  << "("<< it->first << "), "<<  " ("<< it->second << ")"<<  std::endl;
+    }
+    
     
     
 }
