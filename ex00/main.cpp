@@ -5,7 +5,8 @@ int main(int argc, char  *av[])
 {
     try
     {
-        BitcoinExchange(std::string(av[1]));
+        BitcoinExchange btc;
+        btc.analise_doc("input.txt");
     }
     catch(const std::exception& e)
     {  
