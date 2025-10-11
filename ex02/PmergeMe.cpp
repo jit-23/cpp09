@@ -26,9 +26,35 @@ void PmergeMe::fill_vt(std::string str) {
     this->raw_vt = split(str, tk_vt);
 }
 
+static void print_list(std::list<int> x)
+{
+    for (std::list<int>::iterator it = x.begin(); it != x.end(); it++)
+    {
+        std::cout << "print_list : " << *it << std::endl;
+    }
+    std::cout << "\n";
+}
+
+
+static void print_listpair(std::list<std::pair<int, int> >x)
+{
+    for (std::list<std::pair<int, int> >::iterator it = x.begin(); it != x.end(); it++)
+    {
+        std::cout << "print_listpair : " << it->first <<  ", " << it->second  << std::endl;
+    }
+    std::cout << "\n";
+}
+
+
 void PmergeMe::fill_lst(std::string str) {
     PmergeMe::lst tk_lst;
     this->raw_lst = split(str, tk_lst);
+    printf(RED);
+    printf("im in fill_lst\n");
+    printf(END);
+    
+    
+
 }
 
 /*  */
@@ -111,10 +137,19 @@ PmergeMe::lst insert_nbr(PmergeMe::lst lt, int  to_insert){
             return (lt);    
         }
         else if (to_insert < *it)
+        {
+            std::cout << "to_insert: "  << to_insert << std::endl;
+            
             max = pos - 1;
+        }
         else
+        {
             min = pos + 1;
-    }    
+        }
+    }
+    it  = lt.begin();
+    std::advance(it, min);
+
     lt.insert(it, to_insert );
     return lt;
 }
@@ -142,7 +177,6 @@ PmergeMe::vtr PmergeMe::merge_insertion(PmergeMe::vtr vt)
     }
     if (vt.size() % 2 == 1)
         leftover.push_back(vt[vt.size() - 1]);
-    // todo: funcao que tire os numeros maiores dos pairs, para outro vetor
     PmergeMe::vtr larger_nbr = extract_larger_number(pairs);
     PmergeMe::vtr smaller_nbr = extract_smaller_number(pairs);
     PmergeMe::vtr sorted = merge_insertion(larger_nbr);
@@ -158,6 +192,8 @@ PmergeMe::lst PmergeMe::merge_insertion(PmergeMe::lst lst)
     if (lst.size() <= 1) {return lst;}
     PmergeMe::lst leftover;
     list_pair pairs;
+//    print_list(lst);
+
     for (PmergeMe::lst::iterator it = lst.begin(); it != lst.end() ;)
     {
         PmergeMe::lst::iterator next = it;
@@ -173,45 +209,83 @@ PmergeMe::lst PmergeMe::merge_insertion(PmergeMe::lst lst)
             break;
         std::advance(it, 2);
     }
+    print_listpair(pairs);
+
     if (lst.size() % 2 == 1)
-        push_element(leftover, lst.size() - 1);
-    // todo: funcao que tire os numeros maiores dos pairs, para outro vetor
+    {
+        if (leftover.empty())
+        {
+            PmergeMe::lst::iterator it = raw_lst.begin();
+            std::advance(it, lst.size() - 1);
+            leftover.push_back(*it);
+        }
+        else
+            leftover = push_element(leftover, lst.size() - 1);
+    }
+
     PmergeMe::lst larger_nbr = extract_larger_number(pairs);
     PmergeMe::lst smaller_nbr = extract_smaller_number(pairs);
     PmergeMe::lst sorted = merge_insertion(larger_nbr);
+    printf("\nLARGER NBRS\n");
+    print_list(larger_nbr);
+
+    printf("\nSMALLER NBRS\n");
+    print_list(larger_nbr);
+
+    printf("\nSORTED NBRS\n");
+    print_list(larger_nbr);
+
     for (int i = 0; i < smaller_nbr.size(); i++)
     {
         PmergeMe::lst::iterator it = smaller_nbr.begin();
         std::advance(it , i);
+        std::cout << BLUE << "smaller :" << END<<*it <<  std::endl;
+
         sorted = insert_nbr(sorted, *it);
     }
     for (int i = 0; i < leftover.size(); i++)
     {
         PmergeMe::lst::iterator it = leftover.begin();
         std::advance(it , i);
+        std::cout << BLUE << "leftovers :" << END<<*it <<  std::endl;
         sorted = insert_nbr(sorted, *it);
     }
     return sorted;
 }
 
-void PmergeMe::push_element(PmergeMe::lst list, int index)
+PmergeMe::lst PmergeMe::push_element(PmergeMe::lst list, int index)
 {
-    PmergeMe::lst::iterator it = list.begin();
+    PmergeMe::lst::iterator it = this->raw_lst.begin();
     std::advance(it, index);
     list.push_back(*it);
+    return list;
 }
 
-void PmergeMe::display_info()
+void PmergeMe::display_lst_info()
 {
-    std::cout << "Before Sorting : " ;
-    for( int x = 0; x < raw_vt.size(); x++)
+    std::cout << "Before Sorting(lst) : " ;
+    for(PmergeMe::lst::iterator it = raw_lst.begin(); it != raw_lst.end(); it++)
+        std::cout << *it <<  " ";
+    std::cout << "" << std::endl;
+
+    std::cout << "After Sorting(lst) : ";
+    for(PmergeMe::lst::iterator it = sorted_lst.begin(); it != sorted_lst.end(); it++)
+        std::cout << *it <<  " ";
+
+    std::cout << "" << std::endl;
+}
+
+void PmergeMe::display_vt_info()
+{
+    std::cout << "Before Sorting(vt) : " ;
+    for( int x = 0; x < raw_lst.size(); x++)
     {
         std::cout << raw_vt[x] <<  " ";
     }
     std::cout << "" << std::endl;
     /* .................. */
 
-    std::cout << "After Sorting : ";
+    std::cout << "After Sorting(vt) : ";
     for( int x = 0; x < sorted_vt.size(); x++)
     {
         std::cout << sorted_vt[x] << " ";
@@ -236,16 +310,11 @@ PmergeMe::PmergeMe(std::string str)
     gettimeofday(&vt_end, NULL);
     fill_lst(str);
     sorted_lst = merge_insertion(raw_lst);
-    std::cout << "*sorted_lst" <<  * sorted_lst.begin() << std::endl;
-    for (PmergeMe::lst::iterator i = sorted_lst.begin(); i != sorted_lst.end(); i++)
-    {
-        std::cout << *i << std::endl   ;
-    }
+    std::cout << "\n" << std::endl;
     
-    display_info();
-   // fill_lst(str);
-   // display_lst_info();
-
+    display_lst_info();
+    std::cout << "\n" << std::endl;
+    display_vt_info();
 }
 
 PmergeMe::~PmergeMe()

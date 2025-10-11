@@ -11,7 +11,17 @@
 #include <list>
 #include <utility>
 #include <sys/time.h> 
+#include <cstdio>
 
+
+#define RED "\033[31m"
+#define GREEN "\033[32m"
+#define YELLOW "\033[33m" 
+#define BLUE  "\033[34m"
+#define END  "\033[0m"
+#define OLIVE "\033[38;5;3m"
+#define PURPLE "\033[38;5;5m"
+#define ORANGE "\033[38;5;208m"
 
 class PmergeMe
 {
@@ -52,14 +62,16 @@ class PmergeMe
         
         void fill_vt( std::string str);
         void fill_lst( std::string str);
-        
-        void display_info();
+
+
+        void display_vt_info();
+        void display_lst_info();
 
         vtr merge_insertion(vtr vt);
         lst merge_insertion(lst vt);
         
         // for list only//
-        void push_element(PmergeMe::lst list, int index);
+        lst push_element(PmergeMe::lst list, int index);
         // for list only//
         
         int get_vt_size()const ;
