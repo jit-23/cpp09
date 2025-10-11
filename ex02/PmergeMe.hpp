@@ -63,12 +63,14 @@ class PmergeMe
         void fill_vt( std::string str);
         void fill_lst( std::string str);
 
-
+        
         void display_vt_info();
         void display_lst_info();
-
+        
         vtr merge_insertion(vtr vt);
         lst merge_insertion(lst vt);
+        
+        vtr Jacobsthal_insert(vtr vt, int  to_insert);
         
         // for list only//
         lst push_element(PmergeMe::lst list, int index);

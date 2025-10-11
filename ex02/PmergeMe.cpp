@@ -122,6 +122,7 @@ PmergeMe::vtr insert_nbr(PmergeMe::vtr vt, int  to_insert){
     return vt;
 }
 
+
 PmergeMe::lst insert_nbr(PmergeMe::lst lt, int  to_insert){
     int max = lt.size() - 1;
     int pos;
@@ -134,7 +135,7 @@ PmergeMe::lst insert_nbr(PmergeMe::lst lt, int  to_insert){
         if (to_insert == (int)*it)
         {
             lt.insert(it, to_insert);
-            return (lt);    
+            return (lt); 
         }
         else if (to_insert < *it)
         {
@@ -157,6 +158,58 @@ PmergeMe::lst insert_nbr(PmergeMe::lst lt, int  to_insert){
 
 int PmergeMe::get_vt_size()const {  return raw_vt.size();}
 int PmergeMe::get_lst_size()const {  return raw_lst.size();}
+
+
+PmergeMe::vtr PmergeMe::Jacobsthal_insert(PmergeMe::vtr vt, int  to_insert)
+{
+    PmergeMe::vtr j;
+    j.push_back(0);
+    j.push_back(1);
+    //todo push x elements till the value of Jn is greater than vt.size()
+    //? per ex: vt.size() = 6,  J = [0, 1, 1, 3, 5, 11] // 5 < 6 < 11
+    //?                     index = [0, 1, 2, 3, 4, 5 ]
+    while(j.back() <= vt.size())
+    {
+        int jn = j[j.size() - 1]/* j.back() */ + (2*(j[j.size() - 2]));
+        j.push_back(jn);
+    }
+    // ? at this point i have the jacob vector to work with
+   for (PmergeMe::vtr::iterator it = vt.begin(); it != vt.end(); it++)
+   {
+       std::cout << "sorted-> : "  << *it << std::endl;
+   }
+   printf("-------------------\n");
+
+
+    int prev = 0;
+    int k = 0;
+
+    while (k + 1 < j.size() && j[k + 1] < vt.size()) 
+        k++;
+    int index = j[k];
+    //? quando o to_insert == 2
+    //? comeca a dar errado ./PmergeMe " 6 5 4 3 2 1"
+    while(k > 1)
+    {
+        if (vt[index] == to_insert)
+            break;
+        else if (vt[index] < to_insert)
+        {
+            prev = index;
+            index = std::max(index + j[k - 1], static_cast<int>(vt.size() - 1));
+        }
+        else if (vt[index] > to_insert)
+            index = std::min(prev,index - j[k - 2]);
+        k--;
+    }
+    while(index < vt.size() && vt[index] < to_insert)
+        index++;
+    while(index > 0 && vt[index - 1] > to_insert)
+        index--;
+    vt.insert(vt.begin() + index, to_insert);
+return vt;
+}
+
 
 PmergeMe::vtr PmergeMe::merge_insertion(PmergeMe::vtr vt)
 {
@@ -181,15 +234,21 @@ PmergeMe::vtr PmergeMe::merge_insertion(PmergeMe::vtr vt)
     PmergeMe::vtr smaller_nbr = extract_smaller_number(pairs);
     PmergeMe::vtr sorted = merge_insertion(larger_nbr);
     for (int i = 0; i < smaller_nbr.size(); i++)
-        sorted = insert_nbr(sorted, smaller_nbr[i]);
+        sorted = Jacobsthal_insert(sorted, smaller_nbr[i]);
     for (int i = 0; i < leftover.size(); i++)
-        sorted = insert_nbr(sorted, leftover[i]);
+        sorted = Jacobsthal_insert(sorted, leftover[i]);
     return sorted;
 }
 
+    
+
+
+
 PmergeMe::lst PmergeMe::merge_insertion(PmergeMe::lst lst)
 {
-    if (lst.size() <= 1) {return lst;}
+    if (lst.size() <= 1) {
+        return lst;
+    }
     PmergeMe::lst leftover;
     list_pair pairs;
 //    print_list(lst);
@@ -210,39 +269,29 @@ PmergeMe::lst PmergeMe::merge_insertion(PmergeMe::lst lst)
         std::advance(it, 2);
     }
     print_listpair(pairs);
-
     if (lst.size() % 2 == 1)
     {
-        if (leftover.empty())
-        {
-            PmergeMe::lst::iterator it = raw_lst.begin();
-            std::advance(it, lst.size() - 1);
-            leftover.push_back(*it);
-        }
-        else
-            leftover = push_element(leftover, lst.size() - 1);
-    }
 
+            PmergeMe::lst::iterator it = lst.begin();
+            std::advance(it, lst.size() - 1);
+            std::cout << "???? -> :" << *it << std::endl;
+            leftover.push_back(*it);
+    }
     PmergeMe::lst larger_nbr = extract_larger_number(pairs);
     PmergeMe::lst smaller_nbr = extract_smaller_number(pairs);
+    
     PmergeMe::lst sorted = merge_insertion(larger_nbr);
-    printf("\nLARGER NBRS\n");
-    print_list(larger_nbr);
-
-    printf("\nSMALLER NBRS\n");
-    print_list(larger_nbr);
-
-    printf("\nSORTED NBRS\n");
-    print_list(larger_nbr);
+    print_list(sorted);
 
     for (int i = 0; i < smaller_nbr.size(); i++)
     {
         PmergeMe::lst::iterator it = smaller_nbr.begin();
         std::advance(it , i);
         std::cout << BLUE << "smaller :" << END<<*it <<  std::endl;
-
         sorted = insert_nbr(sorted, *it);
     }
+    printf("smaller puted: \n");
+    print_list(sorted);
     for (int i = 0; i < leftover.size(); i++)
     {
         PmergeMe::lst::iterator it = leftover.begin();
@@ -250,6 +299,8 @@ PmergeMe::lst PmergeMe::merge_insertion(PmergeMe::lst lst)
         std::cout << BLUE << "leftovers :" << END<<*it <<  std::endl;
         sorted = insert_nbr(sorted, *it);
     }
+    printf("leftover puted: \n");
+    print_list(sorted);
     return sorted;
 }
 
@@ -309,10 +360,10 @@ PmergeMe::PmergeMe(std::string str)
     sorted_vt = merge_insertion(raw_vt);
     gettimeofday(&vt_end, NULL);
     fill_lst(str);
-    sorted_lst = merge_insertion(raw_lst);
+   // sorted_lst = merge_insertion(raw_lst);
     std::cout << "\n" << std::endl;
     
-    display_lst_info();
+    //display_lst_info();
     std::cout << "\n" << std::endl;
     display_vt_info();
 }

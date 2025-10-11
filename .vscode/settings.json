@@ -51,7 +51,15 @@
         "ranges": "cpp",
         "span": "cpp",
         "list": "cpp",
-        "optional": "cpp"
+        "optional": "cpp",
+        "charconv": "cpp",
+        "chrono": "cpp",
+        "ratio": "cpp",
+        "format": "cpp",
+        "iomanip": "cpp",
+        "text_encoding": "cpp",
+        "cinttypes": "cpp",
+        "variant": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
