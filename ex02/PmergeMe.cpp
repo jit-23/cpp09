@@ -190,27 +190,40 @@ PmergeMe::vtr PmergeMe::Jacobsthal_insert(PmergeMe::vtr vt, int  to_insert)
     while (k + 1 < j.size() && j[k + 1] < vt.size()) //(k + 1 < j.size() && j[k + 1] < vt.size()
         k++;
     index = j[k];
-    prev = 
+
+//! para tras = index_anterior = index_atual - j[k - 2];
+//! para frente = index_seguinte = index_atual + j[k - 1];
+
+// ! if k = 0 -> index = 0    -> prev = 0;
+// ! if k = 1 -> index = 1    -> prev = 0;
+// ! if k = 2 -> index = 2    -> prev = 1;
+// ! if k > 2 -> index = j[k] -> prev = index + j[k - 1];
+
     //? quando o to_insert == 2
     //? comeca a dar errado ./PmergeMe " 6 5 4 3 2 1"
     while(k > 1)
     {
-        if (vt[index] == to_insert)
+        if (to_insert == vt[index])
             break;
-        if (vt[index] < to_insert)
+        if (to_insert > vt[index])
         {
-            prev = index;
-            index = std::max(index + j[k - 1], static_cast<int>(vt.size() - 1));
+            if (k > 1)
+                index += j[k - 1];
+            index  = std::min(index,static_cast<int>(vt.size() - 1));
         }
-        else if (vt[index] > to_insert)
-            index = std::min(prev,index - j[k - 2]);
+        else if (to_insert < vt[index])
+        {
+            if (k > 2)
+                index -= j[k - 2];
+            else if (k == 1 || k ==2)
+                index = 1;
+            else 
+                index = 0;
+
+            index = std::max(0,index);
+        }
         k--;
     }
-
-    //while(index < vt.size() && vt[index] < to_insert)
-    //    index++;
-    //while(index > 0 && vt[index - 1] > to_insert)
-    //    index--;
     vt.insert(vt.begin() + index, to_insert);
 return vt;
 }
