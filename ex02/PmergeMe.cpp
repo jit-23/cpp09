@@ -14,7 +14,7 @@ PmergeMe::PmergeMe(std::string str)
     pv(this->og_vt); // pv = print vector
     vt = this->og_vt;
     merge_insert(vt, 2);
-    
+    pv(this->vt);
 }
 
 void PmergeMe::pv(PmergeMe::vtr a)
@@ -41,7 +41,6 @@ PmergeMe::vtr PmergeMe::split(const std::string &str, PmergeMe::vtr token_vector
 		token_vector.push_back(atoi(token.c_str()));
 	return token_vector;
 }
-#include <iterator>
 void PmergeMe::merge_insert(PmergeMe::vtr &vetor, int cel_size)
 {
     PmergeMe::vector_pair cels;
@@ -59,37 +58,17 @@ void PmergeMe::merge_insert(PmergeMe::vtr &vetor, int cel_size)
         if (!(it + 1 == vt.end()))
         {
             PmergeMe::vtr::iterator ax = it + 1;
-           // std::cout << "*it : " << *it << std::endl;
-           // std::cout << "*it+1 : " << *(it + 1) << std::endl;
             if (*it > *(it + 1))
             { 
                 ax = (it);
                 cels.push_back(std::make_pair(*(it + 1), *it)); // se trocarmos isto, tmb teremos que trocar ois numeros que estarao a ser representados pelo HEAD
                 /* TROCA DOS ELEMENTOS DENTRO DA PARCELA AX, BX <-> */
                 if (cel_size == 2)
-                {
-                    //std::cout << "ATENCION: " << vector_sorted[index - 1]<< std::endl;
-                    //std::cout << "ATENCION: " << vector_sorted[index]<< std::endl;
-                    //std::swap(vector_sorted[index - 1], vector_sorted[(index)]);
-                 //   std::cout << "ATENCION: " << vector_sorted[index]<< std::endl;
-                 //   std::cout << "ATENCION: " << vector_sorted[index+1]<< std::endl;
                     std::swap(vector_sorted[index], vector_sorted[(index+1)]);
-
-                }
                 else
                 {
                     for (int i = 0; i < (cel_size/2); i++)
-                    {   
-                      //  pv(vector_sorted);
-                        //std::cout << "||ATENCION: " << vector_sorted[((index*(cel_size/2))) + i] << std::endl; // vai apontar para o primeiro item do *it
-                        // 
-                       // std::cout << ((index*cel_size/2)) + i << std::endl;/* ((index*cel_size) + cel_size) - (cel_size/2) + i */
-                        
-                      //  std::cout << "||SWAP    : " << vector_sorted[((index*cel_size/2) + (cel_size/2) + i)] << std::endl; // vai apontar para o primeiro item do *it + 1
-                      //  std::cout << ((index*cel_size/2) + (cel_size/2) + i)<< std::endl;/*  */
-                        
                         std::swap(vector_sorted[((index*(cel_size/2))) + i], vector_sorted[((index*(cel_size/2)) + (cel_size/2) + i)]);
-                    }
                 }
                 
                 /* TROCA DOS ELEMENTOS DENTRO DA PARCELA AX, BX <-> */
@@ -102,17 +81,54 @@ void PmergeMe::merge_insert(PmergeMe::vtr &vetor, int cel_size)
         else
             break;
     }
-    flag = 1;
     std::cout <<  "-=------" << std::endl;
     this->vt = vector_sorted; 
 //    if (!(cel_size > this->og_vt.size()/2))
-    std::cout << "cel_size:" << cel_size << std::endl; 
+//    std::cout << "cel_size             : " << cel_size << std::endl; 
+//    std::cout << "this->og_vt.size()   : " << this->og_vt.size() << std::endl; 
+//    std::cout << "this->og_vt.size()/2 : " << this->og_vt.size()/2  << std::endl; 
+    
     if ((cel_size <= this->og_vt.size()/2))  
-    {
-        pv(vector_sorted);
         merge_insert(head_cels, cel_size * 2);
-    }
     /* ate aqui consigo lidar em condicoes perfeitas caso nao haja sobras. */
+    vtr pend;
+    vtr main;
+    /* main : b1,a1,a2 */
+    /* pend : Bx exceto b1 */
+    index = 0;
+    std::cout << "HEY?" << std::endl;
+    for (vtr_it it = vector_sorted.begin(); it != vector_sorted.end() ;)
+    {
+        if (index % 2 == 0) // Bx
+        {
+            if (index == 0)
+            {
+                for (int i = 0; i < cel_size/2; i++){
+                    main.push_back(vector_sorted[index*(cel_size/2) + i]);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < cel_size/2; i++){
+                    pend.push_back(vector_sorted[index*(cel_size/2) + i]);
+                }
+            }
+        }
+        else // Ax
+        {
+            for (int i = 0; i < cel_size/2; i++){
+                main.push_back(vector_sorted[index*(cel_size/2) + i]);
+            }
+        }
+        index++;
+        it+=(cel_size/2);
+    }
+    std::cout << "cel_size = "<< cel_size << std::endl;
+    std::cout << "MAIN:"<< std::endl;
+    pv(main);
+    std::cout << "PEND:"<< std::endl;
+    pv(pend);
+    std::cout << "+++++++++++++++++++++=="<< std::endl;
 }
 
 
