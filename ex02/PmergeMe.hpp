@@ -10,6 +10,18 @@
 /* 5 7 3 1 8 2 6 4 */
 
 
+#define RED "\033[31m"
+#define GREEN "\033[32m"
+#define YELLOW "\033[33m" 
+#define BLUE  "\033[34m"
+#define OLIVE "\033[38;5;3m"
+#define PURPLE "\033[38;5;5m"
+#define ORANGE "\033[38;5;208m"
+#define CYAN "\033[38;5;6m"
+#define LIGHT_GRAY "\033[38;5;7m"
+#define DARK_GRAY "\033[38;5;8m"
+#define END  "\033[0m"
+
 
 class PmergeMe
 {

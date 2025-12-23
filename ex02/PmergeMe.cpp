@@ -1,5 +1,23 @@
 #include "PmergeMe.hpp"
 
+int jn(int n)
+{
+    int jn[n + 1];
+
+    // base case
+    jn[0] = 0;
+    jn[1] = 1;
+
+    for (int i = 2; i <= n; i++)
+    {
+        int j1 = jn[i - 1];
+        int j2 = jn[i - 2];
+        jn[i] = j1 + (2 * j2);
+    }
+    if (jn[n] > n)
+        return jn[n - 1];
+    return jn[n];
+}
 
 PmergeMe::PmergeMe(std::string str)
 {
@@ -21,9 +39,9 @@ void PmergeMe::pv(PmergeMe::vtr a)
 {
     for (PmergeMe::vtr_it it = a.begin(); it != a.end() ; it++)
     {
-        std::cout << *it << " ";
+        std::cout <<BLUE<< *it << " ";
     }
-    std::cout << ";" << std::endl;
+    std::cout << ";" <<END<< std::endl;
 }
 
 
@@ -41,6 +59,7 @@ PmergeMe::vtr PmergeMe::split(const std::string &str, PmergeMe::vtr token_vector
 		token_vector.push_back(atoi(token.c_str()));
 	return token_vector;
 }
+
 void PmergeMe::merge_insert(PmergeMe::vtr &vetor, int cel_size)
 {
     PmergeMe::vector_pair cels;
@@ -81,54 +100,76 @@ void PmergeMe::merge_insert(PmergeMe::vtr &vetor, int cel_size)
         else
             break;
     }
-    std::cout <<  "-=------" << std::endl;
-    this->vt = vector_sorted; 
-//    if (!(cel_size > this->og_vt.size()/2))
-//    std::cout << "cel_size             : " << cel_size << std::endl; 
-//    std::cout << "this->og_vt.size()   : " << this->og_vt.size() << std::endl; 
-//    std::cout << "this->og_vt.size()/2 : " << this->og_vt.size()/2  << std::endl; 
+    //std::cout <<  "--------" << std::endl;
+    //    if (!(cel_size > this->og_vt.size()/2))
+    //    std::cout << "cel_size             : " << cel_size << std::endl; 
+    //    std::cout << "this->og_vt.size()   : " << this->og_vt.size() << std::endl; 
+    //    std::cout << "this->og_vt.size()/2 : " << this->og_vt.size()/2  << std::endl; 
+    this->vt = vector_sorted;
     
-    if ((cel_size <= this->og_vt.size()/2))  
+    if ((cel_size <= this->vt.size()/2))  
         merge_insert(head_cels, cel_size * 2);
+
+    //std::cout <<RED<< "RECURSION BACK:" <<END<< std::endl;
+    //std::cout <<RED<< "cel_size: " << cel_size<< std::endl;
+
+    //    this->vt = vector_sorted; 
     /* ate aqui consigo lidar em condicoes perfeitas caso nao haja sobras. */
     vtr pend;
     vtr main;
-    /* main : b1,a1,a2 */
+    /* main : b1,Ax */
     /* pend : Bx exceto b1 */
     index = 0;
-    std::cout << "HEY?" << std::endl;
-    for (vtr_it it = vector_sorted.begin(); it != vector_sorted.end() ;)
+   // std::cout << "VT VECTOR" << std::endl;
+  //  pv(vt);
+  //  std::cout << "->\n";
+    for (vtr_it it = this->vt.begin(); it != this->vt.end() ;)
     {
         if (index % 2 == 0) // Bx
         {
             if (index == 0)
-            {
-                for (int i = 0; i < cel_size/2; i++){
-                    main.push_back(vector_sorted[index*(cel_size/2) + i]);
-                }
-            }
+                for (int i = 0; i < cel_size/2; i++){ main.push_back(this->vt[index*(cel_size/2) + i]);}
             else
-            {
-                for (int i = 0; i < cel_size/2; i++){
-                    pend.push_back(vector_sorted[index*(cel_size/2) + i]);
-                }
-            }
+                for (int i = 0; i < cel_size/2; i++){ pend.push_back(this->vt[index*(cel_size/2) + i]);}
         }
         else // Ax
-        {
-            for (int i = 0; i < cel_size/2; i++){
-                main.push_back(vector_sorted[index*(cel_size/2) + i]);
-            }
-        }
+            for (int i = 0; i < cel_size/2; i++){ main.push_back(this->vt[index*(cel_size/2) + i]);}
+        
         index++;
-        it+=(cel_size/2);
+        it += (cel_size / 2);
     }
-    std::cout << "cel_size = "<< cel_size << std::endl;
-    std::cout << "MAIN:"<< std::endl;
-    pv(main);
-    std::cout << "PEND:"<< std::endl;
-    pv(pend);
-    std::cout << "+++++++++++++++++++++=="<< std::endl;
+ //   std::cout << "cel_size = "<< cel_size << std::endl;
+   // std::cout << "MAIN:"<< std::endl;
+    //pv(main);
+  //  std::cout << "PEND:"<< std::endl;
+    //pv(pend);
+    // this->vt = vector_sorted;
+   /* the main and the pend are ordered like its supesed to:*/
+    
+    //? number of blocks (ax + bx)
+    int number_blocks = this->vt.size() / (cel_size/2);
+    bool alone = false;
+    if (number_blocks % 2 == 1)
+        alone = true;
+    int bx = number_blocks/2 + alone;
+    //for (vtr_it it = this->vt.begin(); it != this->vt.end() ;)
+    int b_array[bx];
+    for (int i = 0; i < bx; i++)
+        b_array[i] = i+1;
+    //todo fazer um pend e um main com make pair, em que o primeiro valor sera o nbr e o segundo sera o valor do (a/b)X
+    //
+    while(!pend.empty())
+    {
+        int jac = jn(bx);
+        vtr_it it = pend.begin();// + jac * cel_size/2;
+        it += jac; //? esta a apontar para o bx que sera inserido no main.
+        //? it ate a apontar para o valor de bx;
+
+    }
+   
+
+
+    //std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"<< std::endl;
 }
 
 
