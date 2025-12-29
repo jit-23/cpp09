@@ -3,8 +3,6 @@
 int jn(int n)
 {
     int jn[n + 1];
-
-    // base case
     jn[0] = 0;
     jn[1] = 1;
 
@@ -60,13 +58,51 @@ PmergeMe::vtr PmergeMe::split(const std::string &str, PmergeMe::vtr token_vector
 	return token_vector;
 }
 
+int find_main_x(std::vector<std::string> v,  std::string pend_insert)
+{
+    int bx = pend_insert[1];
+    for (std::vector<std::string>::iterator it = v.begin(); it != v.end(); it++)
+    {
+        if ((*t)[1] == bx)
+            return std::distance(v.begin(), it);
+    }
+    return v.size(); 
+}
+
+int find_pend_x(std::vector<std::string> v,  int x)
+{// x e o numero de jac que vamos procurar no pend para mandar para o main
+    std::vector<std::string>::iterator max  = v.begin();
+    for (std::vector<std::string>::iterator it = v.begin(); it != v.end(); it++)
+    {
+        std::string s = *it;
+        if (s[1] - '0' >= tmp && s[1] - '0' <= x)
+        {
+            tmp = s[1] - '0';
+            max = it;
+        }
+        else
+            break;
+    }
+    tmp = std::distance(v.begin(), max);
+    return tmp;
+}
+
+int find_pend_target(vtr pend,  int x)
+{// x e o numero de bx que vamos procurar no pend para mandar para o main
+    for (std::vector<std::string>::iterator it = pend.begin(); it != v.end(); it++)
+    {
+        
+        return tmp;
+    }
+}
+
+
 void PmergeMe::merge_insert(PmergeMe::vtr &vetor, int cel_size)
 {
     PmergeMe::vector_pair cels;
     PmergeMe::vtr head_cels;
     PmergeMe::vtr vector_sorted = this->vt;
     int index = 0;
-    //int index = 1;
     static int flag = 0;
     for (PmergeMe::vtr::iterator it = vetor.begin(); it != vetor.end(); it += 2) 
     {
@@ -100,73 +136,116 @@ void PmergeMe::merge_insert(PmergeMe::vtr &vetor, int cel_size)
         else
             break;
     }
-    //std::cout <<  "--------" << std::endl;
-    //    if (!(cel_size > this->og_vt.size()/2))
-    //    std::cout << "cel_size             : " << cel_size << std::endl; 
-    //    std::cout << "this->og_vt.size()   : " << this->og_vt.size() << std::endl; 
-    //    std::cout << "this->og_vt.size()/2 : " << this->og_vt.size()/2  << std::endl; 
     this->vt = vector_sorted;
-    
     if ((cel_size <= this->vt.size()/2))  
         merge_insert(head_cels, cel_size * 2);
-
-    //std::cout <<RED<< "RECURSION BACK:" <<END<< std::endl;
-    //std::cout <<RED<< "cel_size: " << cel_size<< std::endl;
-
-    //    this->vt = vector_sorted; 
     /* ate aqui consigo lidar em condicoes perfeitas caso nao haja sobras. */
     vtr pend;
     vtr main;
-    /* main : b1,Ax */
-    /* pend : Bx exceto b1 */
     index = 0;
-   // std::cout << "VT VECTOR" << std::endl;
-  //  pv(vt);
-  //  std::cout << "->\n";
-    for (vtr_it it = this->vt.begin(); it != this->vt.end() ;)
-    {
-        if (index % 2 == 0) // Bx
-        {
-            if (index == 0)
-                for (int i = 0; i < cel_size/2; i++){ main.push_back(this->vt[index*(cel_size/2) + i]);}
+  std::vector<std::string> main_str;
+  std::vector<std::string> pend_str;
+  for (vtr_it it = this->vt.begin(); it != this->vt.end() ;)
+  {
+      if (index % 2 == 0) // Bx
+      {
+          if (index == 0)
+          {
+              for (int i = 0; i < cel_size/2; i++)
+              {
+                  main.push_back(this->vt[index*(cel_size/2) + i]);
+                }
+            }
             else
-                for (int i = 0; i < cel_size/2; i++){ pend.push_back(this->vt[index*(cel_size/2) + i]);}
+            {
+                for (int i = 0; i < cel_size/2; i++)
+                {
+                    pend.push_back(this->vt[index*(cel_size/2) + i]);
+                }
+            }
         }
         else // Ax
-            for (int i = 0; i < cel_size/2; i++){ main.push_back(this->vt[index*(cel_size/2) + i]);}
-        
+        {
+            for (int i = 0; i < cel_size/2; i++)
+            {
+                main.push_back(this->vt[index*(cel_size/2) + i]);
+            }
+        }        
         index++;
         it += (cel_size / 2);
     }
- //   std::cout << "cel_size = "<< cel_size << std::endl;
-   // std::cout << "MAIN:"<< std::endl;
-    //pv(main);
-  //  std::cout << "PEND:"<< std::endl;
-    //pv(pend);
-    // this->vt = vector_sorted;
-   /* the main and the pend are ordered like its supesed to:*/
+    //todo : check for the main and pend vector, and fill the main/pend _str with the correspondent Ax and Bx 
     
+    int x_val = 1;
+    //for (vtr_it it = main.begin(); it != main.end(); it++)
+    for (int i = 0; i <= main.size(); i += (cel_size / 2))
+    {
+        std::string b = "b";
+        std::string a = "a";
+        std::stringstream ss;
+        if (i == 0)
+        {
+            ss << b << x_val;
+            main_str.push_back(ss.str());
+        }
+        else
+        {
+            ss << a << x_val;
+            main_str.push_back(ss.str());
+            x_val++;
+        }
+    }
+
+    x_val = 2;
+    //for (vtr_it it = pend.begin(); it != pend.end(); it++)
+    for (int i = 0; i <= pend.size(); i += (cel_size / 2))
+    {
+        std::string b = "b";
+        std::stringstream ss;
+        ss << b << x_val;
+        pend_str.push_back(ss.str());
+        x_val++;
+    }
+ 
+    /* exit(1); */
     //? number of blocks (ax + bx)
     int number_blocks = this->vt.size() / (cel_size/2);
     bool alone = false;
     if (number_blocks % 2 == 1)
         alone = true;
     int bx = number_blocks/2 + alone;
-    //for (vtr_it it = this->vt.begin(); it != this->vt.end() ;)
-    int b_array[bx];
-    for (int i = 0; i < bx; i++)
-        b_array[i] = i+1;
     //todo fazer um pend e um main com make pair, em que o primeiro valor sera o nbr e o segundo sera o valor do (a/b)X
-    //
+    int bx_flag;
     while(!pend.empty())
     {
-        int jac = jn(bx);
-        vtr_it it = pend.begin();// + jac * cel_size/2;
+        bx_flag = jn(bx); // bx flag aponta para 3, e vamos encontrar o bx menor mais proximo dele.
+        int pend_idx = find_pend_x(pend_str,bx_flag);
+        // idx is the index of pend that is good to send to main        
+        std::string pend_string = pend[pend_idx];
+        
+        
+        //todo find the index to insert in main_str();
+        int main_idx = find_main_x(main_str, pend[pend_idx]);
+        
+        
+        //! BEFORE INSERTING , COMPARE THE NUMBERS OF THE HEADS NOW THAT U HAVE THE INDEX OF THE TARGET AND THE SENDER
+
+        //main_str.insert();
+        //todo = copy pend[idx] to main[idk]
+        
+
+
+        //todo erase pend[idx]
+        
+        //todo -> erase the bx in the pend_str and in the pend vector
+        //todo -> then send it to main with the same logic to find the ax that correspond to bx;
+        
+        
         it += jac; //? esta a apontar para o bx que sera inserido no main.
+
         //? it ate a apontar para o valor de bx;
 
     }
-   
 
 
     //std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"<< std::endl;
