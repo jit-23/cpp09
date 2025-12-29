@@ -273,7 +273,6 @@ int BitcoinExchange::parse_value(std::string raw_val, double *value_nbr)
     
     return 1;
 }
-
 void BitcoinExchange::check_doc()
 {
     std::string buffer;
@@ -357,7 +356,7 @@ void BitcoinExchange::analise_doc(std::string file_name)
     }
 }
 
-
+#include <iomanip>
 BitcoinExchange::BitcoinExchange() 
 {
     std::string buffer;
@@ -380,6 +379,11 @@ BitcoinExchange::BitcoinExchange()
         value = buffer.substr(i + 1, buffer.size());
         mapp[date] = atof(value.c_str());
     }
+    for (std::map<std::string, double>::iterator it = this->mapp.begin(); it != mapp.end() ; it++)
+    {
+        std::cout << RED<< std::setprecision(17) << it->second <<END<< std::endl;
+    }
+    
     get_limit_date();
     //for(std::map<std::string, float>::iterator it = mapp.begin(); it != mapp.end(); it++ )
     //    std::cout << it->first << " | " << it->second << std::endl;
