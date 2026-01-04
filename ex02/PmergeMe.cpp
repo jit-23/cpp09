@@ -42,6 +42,15 @@ void PmergeMe::pv(PmergeMe::vtr a, std::string color)
     std::cout << ";" <<END<< std::endl;
 }
 
+void PmergeMe::pv(std::vector<std::string> a, std::string color)
+{
+    for (std::vector<std::string>::iterator it = a.begin(); it != a.end() ; it++)
+    {
+        std::cout <<color<< *it << " ";
+    }
+    std::cout << ";" <<END<< std::endl;
+}
+
 
 void PmergeMe::fill_vt(std::string str) {
     PmergeMe::vtr tk_vt;
@@ -224,8 +233,18 @@ void PmergeMe::merge_insert(PmergeMe::vtr &vetor, int cel_size)
     //{
     //    std::cout << pend_str[i] << std::endl;
     //}
+    std::cout << "pend vector: " << std::endl;
+    pv(pend,CYAN);
+    
+    std::cout << "main vector: " << std::endl;
+    pv(main, CYAN);
+    
+    
     while(!pend.empty())
     {
+        std::cout << "LOOP ->  CELSIZE :"<< cel_size << std::endl;
+
+        sleep(1);
        // std::cout << "pend_str :" << pend_str[0] << std::endl; 
         bx_flag = jn(bx); // bx flag aponta para 3, e vamos encontrar o bx menor mais proximo dele.
         int pend_idx = find_pend_x(pend_str,bx_flag);  //! -> VOU USAR ESTE INDEX PAR NO PEND ORIGINAL 
@@ -238,7 +257,9 @@ void PmergeMe::merge_insert(PmergeMe::vtr &vetor, int cel_size)
         int sender_head = ((pend_idx * (cel_size)) + (cel_size/2)) - 1;
         int main_target_head = main[main_idx * (cel_size/2) + (cel_size/2) - 1]; // head do Ax correspondente a Bx
         //todo int main_target_head_start = main[main_idx * (cel_size/2)]; // inicio da parcela -> (Ax) correspondente a Bx
-        std::cout << "cel size        :" << cel_size << std::endl;
+        if (cel_size == 8)
+        {
+            std::cout << "cel size        :" << cel_size << std::endl;
         std::cout << YELLOW <<
         "sender_head     :" << sender_head << std::endl;
         std::cout << "pend[send_head]  :" << pend[sender_head] << std::endl;
@@ -246,59 +267,64 @@ void PmergeMe::merge_insert(PmergeMe::vtr &vetor, int cel_size)
         std::cout << "main[main_idx]: " << main[main_idx] <<END<< std::endl;
         std::cout << "pend.size() :"<<  pend.size() << std::endl;
         std::cout << "main.size() :"<<  main.size() << std::endl;
-        pv(pend, RED);
+        }
         std::cout << std::endl;
+        std::cout <<GREEN << "MAIN BEFORE INSERTION:" << END<< std::endl;
         pv(main, GREEN);
+        pv(main_str, GREEN);
         std::cout << std::endl;
 
-        sleep(1);
-        std::cout << "-------------------------------" << std::endl;
-        for (int i = main_idx; i >= 0; i--)
+        //for (int i = main_idx; i >= 0; i--)
         {
-         //   std::cout << "main[(main_idx - 1) * (cel_size/2) + ((cel_size/2) - 1)]: " << main[(main_idx - 1) * (cel_size/2) + ((cel_size/2) - 1)] << std::endl;
-           // std::cout << "pend[sender_head] :" << pend[sender_head] << std::endl;
+            //   std::cout << "main[(main_idx - 1) * (cel_size/2) + ((cel_size/2) - 1)]: " << main[(main_idx - 1) * (cel_size/2) + ((cel_size/2) - 1)] << std::endl;
+            // std::cout << "pend[sender_head] :" << pend[sender_head] << std::endl;
             // main[main_idx * (cel_size/2) + (cel_size/2) - 1
             if (pend[sender_head] > (main[(main_idx - 1) * (cel_size/2) + ((cel_size/2) - 1)])) // esta certo
             { // o if compara com o head do Ax certo, agora aqui adiciono o pend para o main 
-                for (int i = 1; i < (cel_size/2) + 1; i++) // insert to main  //todo insert in main_str
+                //for (int i = ((cel_size / 2) + 1); i > 1; i--) // insert to main  //todo insert in main_str
+            for (int i = (cel_size/2); i > 0 ; i--) // insert to main  //todo insert in main_str
                 {
-                    vtr_it it = main.begin() + (main_idx - 1) * (cel_size/2); 
-                    std::cout << "pend sending: " << pend[sender_head - (cel_size/2) + i] << std::endl;
-                    main.insert(it, (pend[sender_head - (cel_size/2) + i]));
+                    vtr_it it = main.begin() + (main_idx ) * (cel_size / 2); 
+                    std::cout << "pend sending: " << pend[sender_head - (cel_size / 2) + i] << std::endl;
+                    main.insert(it, (pend[sender_head - (cel_size / 2) + i]));
                     pv(main, BLUE);
                 }
-                for (int i = 1; i < ((cel_size/2)); i++) // erase in  pend  //todo erase in pend_str
+                for (int i = 1; i < ((cel_size/2) + 1); i++) // erase in  pend  //todo erase in pend_str
                 {
-                        if (pend.empty())
-                            break ;
-                        std::cout<< RED << "pend_erasing: " << *(pend.begin() + pend_idx*(cel_size))<<END << std::endl;
-                        pend.erase(pend.begin() + pend_idx*(cel_size));
-                        //vtr_it it1 = pend.begin() + pend_idx*(cel_size/2);
-                        //vtr_it it2 = pend.begin() + pend_idx*(cel_size/2) + ((cel_size/2) -1);
-                        //std::cout << "(cel_size/2) " << (cel_size/2)<< std::endl;
-                        //std::cout << "it1 " << *it1<< std::endl;
-                        //std::cout << "it2 " << *it2<< std::endl;
-                        //pend.erase(pend.begin() + pend_idx * (cel_size/2), pend.begin() + pend_idx*((cel_size/2)-2));
+                    if (pend.empty())
+                    break ;
+                    std::cout<< RED << "pend_erasing: " << *(pend.begin() + pend_idx*(cel_size))<<END << std::endl;
+                    pend.erase(pend.begin() + pend_idx*(cel_size));
+                    //vtr_it it1 = pend.begin() + pend_idx*(cel_size/2);
+                    //vtr_it it2 = pend.begin() + pend_idx*(cel_size/2) + ((cel_size/2) -1);
+                    //std::cout << "(cel_size/2) " << (cel_size/2)<< std::endl;
+                    //std::cout << "it1 " << *it1<< std::endl;
+                    //std::cout << "it2 " << *it2<< std::endl;
+                    //pend.erase(pend.begin() + pend_idx * (cel_size/2), pend.begin() + pend_idx*((cel_size/2)-2));
                 }
-                    }
+                std::cout <<ORANGE<< "MAIN:"<<END << std::endl;
+                
+                pv(main,ORANGE);
             }
-
-
-                //todo  insert the whole section in it
+        }
         
-
+        
+        //todo  insert the whole section in it
+        
+        
         //todo erase pend[idx]
         
         //todo -> erase the bx in the pend_str and in the pend vector
         //todo -> then send it to main with the same logic to find the ax that correspond to bx;
         
         
-       // it += jac; //? esta a apontar para o bx que sera inserido no main.
-
+        // it += jac; //? esta a apontar para o bx que sera inserido no main.
+        
         //? it ate a apontar para o valor de bx;
-
+        
     }
-
+    
+    std::cout << "-------------------------------" << std::endl;
 
     //std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"<< std::endl;
 }
