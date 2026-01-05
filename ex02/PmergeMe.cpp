@@ -37,7 +37,7 @@ void PmergeMe::pv(PmergeMe::vtr a, std::string color)
 {
     for (PmergeMe::vtr_it it = a.begin(); it != a.end() ; it++)
     {
-        std::cout <<color<< *it << " ";
+        std::cout <<color<< *it << ", ";
     }
     std::cout << ";" <<END<< std::endl;
 }
@@ -150,6 +150,17 @@ void PmergeMe::merge_insert(PmergeMe::vtr &vetor, int cel_size)
     if ((cel_size <= this->vt.size()/2))  
         merge_insert(head_cels, cel_size * 2);
     /* ate aqui consigo lidar em condicoes perfeitas caso nao haja sobras. */
+ 
+    std::cout<<YELLOW << "\n                  ********************************" << std::endl;
+            std::cout << "                  *                              *" << std::endl;
+            std::cout << "                  *                              *" << std::endl;
+            std::cout << "                  *       NEXT ITERATION         *" << std::endl;
+            std::cout << "                  *     CEL SIZE  = "<< cel_size << "            *" << std::endl;
+            std::cout << "                  *   A/B(x) size = "<<  cel_size/2<<               "            *" << std::endl;
+            std::cout << "                  ********************************\n" << END<< std::endl;
+    
+    
+    
     vtr pend;
     vtr main;
     index = 0;
@@ -307,7 +318,7 @@ void PmergeMe::merge_insert(PmergeMe::vtr &vetor, int cel_size)
                 pv(main,ORANGE);
             }
         }
-        
+        //this->vt = main;
         
         //todo  insert the whole section in it
         
@@ -324,7 +335,6 @@ void PmergeMe::merge_insert(PmergeMe::vtr &vetor, int cel_size)
         
     }
     
-    std::cout << "-------------------------------" << std::endl;
 
     //std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"<< std::endl;
 }
