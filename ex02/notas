@@ -1,0 +1,49 @@
+
+
+
+
+
+
+
+
+
+
+
+if (pend[pend_target_end_idx] > (main[(main_idx - 1) * (cel_size) + ((cel_size/2) - 1)])) // esta certo
+        { // o if compara com o head do Ax certo, agora aqui adiciono o pend para o main 
+            for (int i = (cel_size/2); i > 0 ; i--) // insert to main  //todo insert in main_str
+            {
+                vtr_it it = main.begin() + (main_idx ) * (cel_size / 2); 
+                std::cout << "pend sending: " << pend[pend_target_end_idx - (cel_size / 2) + i] << std::endl;
+                main.insert(it, (pend[pend_target_end_idx - (cel_size / 2) + i]));
+                //! after inserting in the main, insert in the _str
+                pv(main, BLUE);
+            }
+            for (int i = 1; i < ((cel_size/2) + 1); i++) // erase in  pend  //todo erase in pend_str
+            {
+                if (pend.empty())
+                    break ;
+              //  std::cout<< RED << "pend_erasing: " << *(pend.begin() + pend_idx*(cel_size))<<END << std::endl;
+               pend.erase(pend.begin() + pend_idx*(cel_size));
+            }
+            std::cout <<ORANGE<< "MAIN:"<<END << std::endl;
+
+            
+//    pv(main,ORANGE,  cel_size);
+//    pv(pend,ORANGE,  cel_size);
+//    pv(main_str,ORANGE, cel_size);
+        //this->vt = main;
+        
+        //todo  insert the whole section in it
+        
+        std::cout << std::endl;
+        //todo erase pend[idx]
+        
+        //todo -> erase the bx in the pend_str and in the pend vector
+        //todo -> then send it to main with the same logic to find the ax that correspond to bx;
+
+        
+            
+            // std::cout << << std::endl;
+        }
+    }

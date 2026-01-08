@@ -37,8 +37,13 @@ public:
     vtr split(const std::string &str, vtr token_vector);
     void fill_vt(std::string str);
     void pv(PmergeMe::vtr a, std::string );
+    void pv(PmergeMe::vtr a, std::string, int  cel );
+
     void pv(std::vector<std::string> a, std::string );
+    void pv(std::vector<std::string> a, std::string, int cel_size);
     void merge_insert(vtr &vetor, int cel_size);
     
     ~PmergeMe();
 };
+
+
