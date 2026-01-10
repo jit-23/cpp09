@@ -128,8 +128,14 @@ PmergeMe::vtr PmergeMe::split(const std::string &str, PmergeMe::vtr token_vector
 	std::string 		 token;
 	std::istringstream 	 iss(str);
 
+    int x = 0;
 	while(iss >> token)
-		token_vector.push_back(atoi(token.c_str()));
+    {
+        x = atoi(token.c_str());
+        if (x == -1)
+            throw std::runtime_error("overflow of the interger value!");;
+        token_vector.push_back(x);
+    }
 	return token_vector;
 }
 
@@ -176,7 +182,7 @@ int upgrade_jn(std::vector<std::string> pend_str, int jac_number, int bx_max )
 {
     //if (pend_str)
     std::string str = pend_str[0];
-    std::cout << "~~~~~~~~~~~~~~~~~\n";
+    //std::cout << "~~~~~~~~~~~~~~~~~\n";
    // std::cout <<RED<< "str before  : " << str << std::endl;  
     str.erase(str.begin());
    // std::cout <<RED<< "str after   : " << str << std::endl; 
@@ -297,16 +303,16 @@ void PmergeMe::merge_insert(PmergeMe::vtr &head_vectors, int cel_size)
     {
         if (this->vt.size() > (max_blocks * cel_size / 2))
         {
-            std::cout << "INSIDE NEW IF\n";
+      //      std::cout << "INSIDE NEW IF\n";
             int index2 = max_blocks * cel_size / 2;
             while (this->vt.size() > index2)
             {
                 pend.push_back(this->vt[index2++]);
             }
-            std::cout << "THIS VECTPOR : ";
-            pv(this->vt, ORANGE, 0);
-            std::cout << "PEND : VECTOR : ";
-            pv(pend, ORANGE, 0);
+       //     std::cout << "THIS VECTPOR : ";
+        //    pv(this->vt, ORANGE, 0);
+      //      std::cout << "PEND : VECTOR : ";
+        //    pv(pend, ORANGE, 0);
             break;
         }
     }
@@ -314,7 +320,7 @@ void PmergeMe::merge_insert(PmergeMe::vtr &head_vectors, int cel_size)
       {
           if (index == 0)
           {
-            std::cout << "INSIDE\n";
+       //     std::cout << "INSIDE\n";
               for (int i = 0; i < cel_size/2; i++)
               {
                   main.push_back(this->vt[index*(cel_size/2) + i]);
@@ -333,7 +339,7 @@ void PmergeMe::merge_insert(PmergeMe::vtr &head_vectors, int cel_size)
         }
         else // Ax
         {
-            std::cout << "INSIDE\n";
+        //    std::cout << "INSIDE\n";
             for (int i = 0; i < cel_size/2; i++)
             {
                 if ((index*(cel_size/2) + i) >= this->vt.size())
@@ -405,7 +411,7 @@ void PmergeMe::merge_insert(PmergeMe::vtr &head_vectors, int cel_size)
         
         int main_idx = find_main_x(main_str, pend_string); //! -> VOU USAR ESTE INDEX PAR NO MAIN ORIGINAL -> este e o index da celula correspondente ao pend_str
         
-        std::cout << "main_idx : " << main_idx << std::endl;
+        //std::cout << "main_idx : " << main_idx << std::endl;
 
         int pend_target_start_idx = pend_idx*(cel_size/2); // 
         int pend_target_end_idx = (pend_idx*(cel_size/2) ) + ((cel_size/2) - 1); // 
@@ -418,14 +424,14 @@ void PmergeMe::merge_insert(PmergeMe::vtr &head_vectors, int cel_size)
       int ideal_main_insertion_idx = main_target_end_idx - ((cel_size/2) * i);
 
       int ideal_main_str_insertion_idx = ideal_main_insertion_idx / (cel_size/2);   //main_target_end_idx / (cel_size/2);
-    std::cout << "BEFOREEEEE  "<< std::endl;
-    std::cout << "pend vector: " << std::endl;
-    pv(pend,CYAN, cel_size);
-    pv(pend_str,CYAN);
-    std::cout << "main vector: " << std::endl;
-    pv(main, CYAN, cel_size);
-    pv(main_str, CYAN);
-    std::cout << "AFTER  "<< std::endl;
+    //std::cout << "BEFOREEEEE  "<< std::endl;
+   // std::cout << "pend vector: " << std::endl;
+   // pv(pend,CYAN, cel_size);
+   // pv(pend_str,CYAN);
+    //std::cout << "main vector: " << std::endl;
+   // pv(main, CYAN, cel_size);
+   // pv(main_str, CYAN);
+ //   std::cout << "AFTER  "<< std::endl;
         for (int i = (cel_size/2); i > 0 ; i--) // loop where am going to insert the whole chunk of bx in the ideal main_inserttoin indx
         {
             vtr_it it = main.begin() + ideal_main_insertion_idx + 1;
@@ -440,15 +446,15 @@ void PmergeMe::merge_insert(PmergeMe::vtr &head_vectors, int cel_size)
             pend.erase(it);
         }
         pend_str.erase(pend_str.begin() + pend_idx);
-            std::cout <<BLUE<< "PEND: ";
-            pv(pend, BLUE, cel_size);
-            pv(pend_str, BLUE, cel_size);
-            std::cout <<GREEN<< "MAIN: ";
-            pv(main, GREEN, cel_size);
-            pv(main_str, GREEN, cel_size);
-            std::cout << "\n" << std::endl;
+      //      std::cout <<BLUE<< "PEND: ";
+    ////        pv(pend, BLUE, cel_size);
+      //      pv(pend_str, BLUE, cel_size);
+      //      std::cout <<GREEN<< "MAIN: ";
+      //      pv(main, GREEN, cel_size);
+      //      pv(main_str, GREEN, cel_size);
+      //      std::cout << "\n" << std::endl;
     }    
-    pv(main, OLIVE, 0);
+    //pv(main, OLIVE, 0);
     std::cout <<RED<< "=========================================" << std::endl;
     this->vt = main;    
     
