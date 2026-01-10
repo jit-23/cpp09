@@ -798,3 +798,17 @@ void PmergeMe::merge_insert(PmergeMe::vtr &vetor, int cel_size)
 
 
 PmergeMe::~PmergeMe(){}
+
+        std::cout <<ORANGE<<  "pend_idx : " << pend_idx << std::endl;
+        std::cout <<ORANGE<< "H : " << h << std::endl;
+        std::cout <<ORANGE<< "BX : " << bx << std::endl;
+        std::cout << ORANGE << "JN: " << jn_vtr[h] << END  << std::endl;
+//
+        
+        //pv(jn_vtr,RED, 0 );
+        //std::cou
+        //? se o find_pend_x == -1;
+        //? 
+        // caso jn_vtr[h] != n existe no pend_str -> 
+        // percorrer de forma contraria o vtr restante e aplicar a mm logica embaixo  
+

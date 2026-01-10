@@ -25,23 +25,23 @@
 
 class PmergeMe
 {
-private:
-    std::vector<int> vt;
-    std::vector<int> og_vt;
-public:
-    typedef std::vector<std::pair<int, int> > vector_pair; 
-    typedef std::vector<int>::iterator vtr_it; 
-    typedef std::vector<int> vtr; 
-
-    PmergeMe(std::string str_vt);
-    vtr split(const std::string &str, vtr token_vector);
-    void fill_vt(std::string str);
-    void pv(PmergeMe::vtr a, std::string );
-    void pv(PmergeMe::vtr a, std::string, int  cel );
-
-    void pv(std::vector<std::string> a, std::string );
-    void pv(std::vector<std::string> a, std::string, int cel_size);
-    void merge_insert(vtr &vetor, int cel_size);
+    private:
+        int iterations;
+        std::vector<int> vt;
+        std::vector<int> og_vt;
+    public:
+        typedef std::vector<std::pair<int, int> > vector_pair; 
+        typedef std::vector<int>::iterator vtr_it; 
+        typedef std::vector<int> vtr; 
+        
+        PmergeMe(std::string str_vt);
+        void fill_vt(std::string str);
+        void pv(PmergeMe::vtr a, std::string );
+        void merge_insert(vtr &vetor, int cel_size);
+        void pv(PmergeMe::vtr a, std::string, int  cel );
+        void pv(std::vector<std::string> a, std::string );
+        vtr split(const std::string &str, vtr token_vector);
+        void pv(std::vector<std::string> a, std::string, int cel_size);
     
     ~PmergeMe();
 };
