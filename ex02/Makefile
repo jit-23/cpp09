@@ -9,6 +9,8 @@ all: ${NAME}
 ${NAME}: ${OBJS}
 	${CXX} ${CXXFLAGS} ${OBJS} -o ${NAME}
 
+
+
 clean:
 	rm -f ${OBJS}
 fclean: clean

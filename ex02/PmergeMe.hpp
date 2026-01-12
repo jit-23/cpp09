@@ -5,10 +5,16 @@
 #include <iostream>
 #include <sstream>
 #include <cstdlib>
+#include <ctime>
+#include <sys/time.h>
+#include <iomanip>
 /*value - "3 2 1 4 5 6 8 7" */
 /*index -  0 1 2 3 4 5 6 7*/
 /* 5 7 3 1 8 2 6 4 */
 
+#ifndef DEBUG
+#define DEBUG 0 
+#endif
 
 #define RED "\033[31m"
 #define GREEN "\033[32m"
@@ -29,11 +35,24 @@ class PmergeMe
         int iterations;
         std::vector<int> vt;
         std::vector<int> og_vt;
+
+        timeval start;
+        timeval end;
+
+        timeval vt_start;
+        timeval vt_end;
+
+        timeval dq_start;
+        timeval dq_end;
+
+
     public:
         typedef std::vector<std::pair<int, int> > vector_pair; 
         typedef std::vector<int>::iterator vtr_it; 
         typedef std::vector<int> vtr; 
         
+        void tester();
+
         PmergeMe(std::string str_vt);
         void fill_vt(std::string str);
         void pv(PmergeMe::vtr a, std::string );
