@@ -1,8 +1,8 @@
 NAME:=btc
-CXXFLAGS:= -g -std=c++98 #-Wall -Werror -Wextra
+CXXFLAGS:= -g -std=c++98 -Wall -Werror -Wextra
 CXX:= c++
 
-SRCS:=main.cpp #srcs/BitcoinExchange.cpp 
+SRCS:=main.cpp BitcoinExchange.cpp 
 OBJS:= ${patsubst %.cpp, %.o, ${SRCS}}
 
 

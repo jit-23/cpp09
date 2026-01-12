@@ -28,6 +28,9 @@ private:
     std::string str;
 public:
     RPN(std::string string);
+    RPN(const RPN &other);
+    RPN &operator=(const RPN &other);
+    
     int check_input(std::string str);
     void execute_RPN();
 
@@ -38,129 +41,3 @@ public:
     void div_operator();
     ~RPN();
 };
-
-
-int RPN::check_input(std::string str)
-{
-    std::string operators = "*+-/";
- 
-    for (int i = 0; i <  str.length() ; i++)
-    {
-        if (str[i] == ' ')
-            continue;
-        else  if (operators.find(str[i]) == std::string::npos && !isdigit(str[i]))
-            return 0;
-    }
-    return 1;
-}
-
-RPN::RPN(std::string _str) : str(_str)
-{
-    std::cout << "RPN constructor called!" << std::endl;
-
-    if (!check_input(str))
-    {
-        std::cout << "invalid str for RPN" << std::endl;
-        return ;
-    }
-    execute_RPN();
-}
-
-void RPN::sum_operator()
-{
-    int x,y, result;
-
-    x = c.top();
-    c.pop();
-    y = c.top();
-    c.pop();
-    result = y + x;
-    c.push(result);
-}
-
-void RPN::res_operator()
-{
-    int x,y, result;
-
-    x = c.top();
-    c.pop();
-    y = c.top();
-    c.pop();
-    result = y - x;
-    c.push(result);
-}
-
-void RPN::mult_operator()
-{
-    int x,y, result;
-
-    x = c.top();
-    c.pop();
-    y = c.top();
-    c.pop();
-    result = y * x;
-    c.push(result);
-}
-
-void RPN::div_operator()
-{
-    int x,y, result;
-
-    x = c.top();
-    c.pop();
-    y = c.top();
-    c.pop();
-    result = y / x;
-    c.push(result);
-}
-
-void RPN::calculate(char op)
-{
-    std::cout << "op:" << op << std::endl;
-    switch (op)
-    {
-    case '+':
-        sum_operator();
-        break;
-    case '-':
-        res_operator();
-        break;
-    case '*':
-        mult_operator();
-        break;
-    case '/':
-        div_operator();
-        break;
-    default:
-        std::cerr << "error:" << std::endl;
-        break;
-    }
-    std::cout << "on top rn: " << c.top() << std::endl;
-}
-
-void RPN::execute_RPN(){
-    std::cout << "------------------\n";
-
-    for (int i = 0; i < str.length(); i++)
-    {
-        if (str[i] == ' ')
-            continue;
-        else if (isdigit(str[i]))
-        {
-            int nbr = str[i] - '0';
-            std::cout << nbr <<  std::endl;
-            c.push(nbr);
-        }
-        else
-            calculate(str[i]);
-        std::cout << "------------------\n";
-    }
-    std::cout << "result: " << c.top() << std::endl;
-}   
-
-
-
-RPN::~RPN()
-{
-    std::cout << "RPN destructor called!" << std::endl;
-}

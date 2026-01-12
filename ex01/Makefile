@@ -1,8 +1,8 @@
 NAME:=RPN
-CXXFLAGS:= -g -std=c++98 #-Wall -Werror -Wextra
+CXXFLAGS:= -g -std=c++98 -Wall -Werror -Wextra
 CXX:= c++
 
-SRCS:=main.cpp #RPN.cpp 
+SRCS:=main.cpp RPN.cpp 
 OBJS:= ${patsubst %.cpp, %.o, ${SRCS}}
 
 

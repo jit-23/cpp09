@@ -1,5 +1,5 @@
 NAME:=PmergeMe
-CXXFLAGS:=  -g -std=c++98 #-Wall -Wextra -Werror
+CXXFLAGS:=  -g -std=c++98 -Wall -Wextra -Werror
 CXX:=c++
 SRCS:= main.cpp PmergeMe.cpp
 OBJS:= ${patsubst %.cpp, %.o, ${SRCS}}
